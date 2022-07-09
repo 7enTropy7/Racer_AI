@@ -1,7 +1,7 @@
 import os
 import pygame
-from math import copysign
 from car import Car
+from utils import generate_border_walls
 
 class Game:
     def __init__(self):
@@ -9,6 +9,7 @@ class Game:
         pygame.display.set_caption("Racer_AI")
         width = 1280
         height = 720
+        self.screen_dims = (width, height)
         self.screen = pygame.display.set_mode((width, height))
         self.clock = pygame.time.Clock()
         self.ticks = 60
@@ -17,6 +18,8 @@ class Game:
     def run(self):
         ppu = 32
         car = Car(5, 15, ppu=ppu)
+        walls = []
+        walls.extend(generate_border_walls(self.screen_dims))
 
         while not self.exit:
             dt = self.clock.get_time() / 1000
@@ -32,6 +35,9 @@ class Game:
             car.step(action=pressed, dt=dt)
 
             self.screen.fill((0, 0, 0))
+
+            for wall in walls:
+                wall.draw(self.screen)
 
             car.draw(self.screen)
 
