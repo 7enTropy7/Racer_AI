@@ -32,7 +32,7 @@ class Game:
             # User input
             pressed = pygame.key.get_pressed()
 
-            car.step(action=pressed, dt=dt)
+            car.step(action=pressed, walls=walls, dt=dt)
 
             self.screen.fill((0, 0, 0))
 

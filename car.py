@@ -27,7 +27,7 @@ class Car:
         self.ray_l = Raycast(startpoint=Vector2(0,0), direction='l')
         self.ray_r = Raycast(startpoint=Vector2(0,0), direction='r')
 
-    def step(self, action, dt):
+    def step(self, action, walls, dt):
         if action[pygame.K_UP]:
             if self.velocity.x < 0:
                 self.acceleration = self.brake_deceleration
@@ -59,10 +59,10 @@ class Car:
             self.steering = 0
         self.steering = max(-self.max_steering, min(self.steering, self.max_steering))
 
-        self.update(dt)
+        self.update(walls, dt)
 
 
-    def update(self, dt):
+    def update(self, walls, dt):
         self.velocity += (self.acceleration * dt, 0)
         self.velocity.x = max(-self.max_velocity, min(self.velocity.x, self.max_velocity))
 
@@ -75,9 +75,9 @@ class Car:
         self.position += self.velocity.rotate(-self.angle) * dt
         self.angle += degrees(angular_velocity) * dt
 
-        self.ray_c.step(car_raycast_startpoint=self.position * self.ppu, car_angle=self.angle)
-        self.ray_l.step(car_raycast_startpoint=self.position * self.ppu, car_angle=self.angle)
-        self.ray_r.step(car_raycast_startpoint=self.position * self.ppu, car_angle=self.angle)
+        self.ray_c.step(car_raycast_startpoint=self.position * self.ppu, car_angle=self.angle, walls=walls)
+        self.ray_l.step(car_raycast_startpoint=self.position * self.ppu, car_angle=self.angle, walls=walls)
+        self.ray_r.step(car_raycast_startpoint=self.position * self.ppu, car_angle=self.angle, walls=walls)
 
     def draw(self, screen):
         self.ray_c.draw(screen)
