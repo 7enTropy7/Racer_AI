@@ -33,6 +33,7 @@ class Game:
             pressed = pygame.key.get_pressed()
 
             car.step(action=pressed, walls=walls, dt=dt)
+            # print("Car state (L, C, R): ", car.state())
 
             self.screen.fill((0, 0, 0))
 

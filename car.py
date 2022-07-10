@@ -79,6 +79,9 @@ class Car:
         self.ray_l.step(car_raycast_startpoint=self.position * self.ppu, car_angle=self.angle, walls=walls)
         self.ray_r.step(car_raycast_startpoint=self.position * self.ppu, car_angle=self.angle, walls=walls)
 
+    def state(self):
+        return [self.ray_l.ray_length, self.ray_c.ray_length, self.ray_r.ray_length]
+    
     def draw(self, screen):
         self.ray_c.draw(screen)
         self.ray_l.draw(screen)
@@ -87,3 +90,8 @@ class Car:
         rotated = pygame.transform.rotate(self.car_image, self.angle)
         rect = rotated.get_rect()
         screen.blit(rotated, self.position * self.ppu - (rect.width / 2, rect.height / 2))
+
+    def get_mask(self):
+        rotated = pygame.transform.rotate(self.car_image, self.angle)
+        rect = rotated.get_rect()
+        # print()

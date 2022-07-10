@@ -1,5 +1,6 @@
 import pygame
 from pygame.math import Vector2
+import math
 
 class Raycast:
     def __init__(self, startpoint, direction):
@@ -11,10 +12,30 @@ class Raycast:
         if direction == 'r':
             self.initial_endpoint = self.startpoint + Vector2(3000, 1800)
         self.endpoint = None
+        self.ray_length = 3000
         
     def step(self, car_raycast_startpoint, car_angle, walls):
         self.endpoint = car_raycast_startpoint + self.initial_endpoint.rotate(-car_angle)
         self.startpoint = car_raycast_startpoint
+
+        closest = 100000
+        closestPoint = None
+        for wall in walls:
+            intersectPoint = self.check_collision(wall)
+            if intersectPoint is not None:
+                # Get distance between ray source and intersect point
+                ray_dx = self.startpoint.x - intersectPoint[0]
+                ray_dy = self.startpoint.y - intersectPoint[1]
+                # If the intersect point is closer than the previous closest intersect point, it becomes the closest intersect point
+                distance = math.sqrt(ray_dx**2 + ray_dy**2)
+                if (distance < closest):
+                    closest = distance
+                    closestPoint = intersectPoint
+                    self.ray_length = closest
+
+        if closestPoint is not None:
+            self.endpoint.x = closestPoint[0]
+            self.endpoint.y = closestPoint[1]
 
 
     def draw(self, screen):
@@ -45,5 +66,4 @@ class Raycast:
             x = x1 + t * (x2 - x1)
             y = y1 + t * (y2 - y1)
             collidePos = [x, y]
-            print(collidePos)
             return collidePos
