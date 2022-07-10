@@ -1,8 +1,18 @@
 import os
+import sys
 import pygame
-from math import sin, radians, degrees, copysign
+import math
+from math import sin, radians, degrees, copysign, cos
 from pygame.math import Vector2
 from raycast import Raycast
+
+def rotate(origin, point, angle):
+    ox, oy = origin
+    px, py = point
+
+    qx = ox + math.cos(angle) * (px - ox) - math.sin(angle) * (py - oy)
+    qy = oy + math.sin(angle) * (px - ox) + math.cos(angle) * (py - oy)
+    return qx, qy
 
 class Car:
     def __init__(self, x, y, ppu=32, angle=0.0, length=4, max_steering=30, max_acceleration=5.0):
@@ -26,6 +36,14 @@ class Car:
         self.ray_c = Raycast(startpoint=Vector2(0,0), direction='c')
         self.ray_l = Raycast(startpoint=Vector2(0,0), direction='l')
         self.ray_r = Raycast(startpoint=Vector2(0,0), direction='r')
+
+        # Border Vertices of Car
+        self.f_l = (self.position.x * self.ppu + (128/2), self.position.y * self.ppu - (64/2))
+        self.f_r = (self.position.x * self.ppu + (128/2), self.position.y * self.ppu + (64/2))
+        self.b_l = (self.position.x * self.ppu - (128/2), self.position.y * self.ppu - (64/2))
+        self.b_r = (self.position.x * self.ppu - (128/2), self.position.y * self.ppu + (64/2))
+        
+
 
     def step(self, action, walls, dt):
         if action[pygame.K_UP]:
@@ -79,6 +97,16 @@ class Car:
         self.ray_l.step(car_raycast_startpoint=self.position * self.ppu, car_angle=self.angle, walls=walls)
         self.ray_r.step(car_raycast_startpoint=self.position * self.ppu, car_angle=self.angle, walls=walls)
 
+        self.f_l = (self.position.x * self.ppu + (128/2), self.position.y * self.ppu - (64/2))
+        self.f_r = (self.position.x * self.ppu + (128/2), self.position.y * self.ppu + (64/2))
+        self.b_l = (self.position.x * self.ppu - (128/2), self.position.y * self.ppu - (64/2))
+        self.b_r = (self.position.x * self.ppu - (128/2), self.position.y * self.ppu + (64/2))
+    
+        self.f_l = rotate(self.position * self.ppu, self.f_l, radians(-self.angle))
+        self.f_r = rotate(self.position * self.ppu, self.f_r, radians(-self.angle))
+        self.b_l = rotate(self.position * self.ppu, self.b_l, radians(-self.angle))
+        self.b_r = rotate(self.position * self.ppu, self.b_r, radians(-self.angle))
+
     def state(self):
         return [self.ray_l.ray_length, self.ray_c.ray_length, self.ray_r.ray_length]
     
@@ -90,4 +118,8 @@ class Car:
         rotated = pygame.transform.rotate(self.car_image, self.angle)
         rect = rotated.get_rect()
         screen.blit(rotated, self.position * self.ppu - (rect.width / 2, rect.height / 2))
-        pygame.draw.rect(self.car_image, (255,0,0), [0, 0, 128, 64], 5)
+
+        pygame.draw.circle(screen, (0,255,0), center=self.f_l, radius=5, width=2)
+        pygame.draw.circle(screen, (0,255,0), center=self.f_r, radius=5, width=2)
+        pygame.draw.circle(screen, (0,255,0), center=self.b_l, radius=5, width=2)
+        pygame.draw.circle(screen, (0,255,0), center=self.b_r, radius=5, width=2)
