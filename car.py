@@ -90,8 +90,4 @@ class Car:
         rotated = pygame.transform.rotate(self.car_image, self.angle)
         rect = rotated.get_rect()
         screen.blit(rotated, self.position * self.ppu - (rect.width / 2, rect.height / 2))
-
-    def get_mask(self):
-        rotated = pygame.transform.rotate(self.car_image, self.angle)
-        rect = rotated.get_rect()
-        # print()
+        pygame.draw.rect(self.car_image, (255,0,0), [0, 0, 128, 64], 5)

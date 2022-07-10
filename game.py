@@ -10,7 +10,7 @@ class Game:
         width = 1280
         height = 720
         self.screen_dims = (width, height)
-        self.screen = pygame.display.set_mode((width, height))
+        self.screen = pygame.display.set_mode((width, height))#, pygame.NOFRAME)
         self.clock = pygame.time.Clock()
         self.ticks = 60
         self.exit = False
