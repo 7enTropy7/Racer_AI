@@ -1,3 +1,4 @@
+from selectors import EVENT_WRITE
 import pygame
 
 pygame.init()
@@ -11,10 +12,16 @@ while not done:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             done = True
+        
         elif event.type == pygame.MOUSEBUTTONDOWN:
-            print('Clicked:', event.pos, counter)
-            counter += 1
+            # print('Clicked:', event.pos, counter)
             points.append(event.pos)
+            print('Added: ', points)
+            counter += 1
+
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                print('Deleted: ', points.pop())
 
     click = pygame.mouse.get_pressed()
     mousex, mousey = pygame.mouse.get_pos()
