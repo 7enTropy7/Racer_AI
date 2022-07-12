@@ -25,16 +25,18 @@ class Car:
         current_dir = os.path.dirname(os.path.abspath(__file__))
         image_path = os.path.join(current_dir, "assets/car.png")
         self.car_image = pygame.image.load(image_path)
+        self.width = self.car_image.get_width()
+        self.height = self.car_image.get_height()
 
         self.ray_c = Raycast(startpoint=Vector2(0,0), direction='c')
         self.ray_l = Raycast(startpoint=Vector2(0,0), direction='l')
         self.ray_r = Raycast(startpoint=Vector2(0,0), direction='r')
 
         # Border Vertices of Car
-        self.f_l = (self.position.x * self.ppu + (128/2), self.position.y * self.ppu - (64/2))
-        self.f_r = (self.position.x * self.ppu + (128/2), self.position.y * self.ppu + (64/2))
-        self.b_l = (self.position.x * self.ppu - (128/2), self.position.y * self.ppu - (64/2))
-        self.b_r = (self.position.x * self.ppu - (128/2), self.position.y * self.ppu + (64/2))
+        self.f_l = (self.position.x * self.ppu + (self.width/2), self.position.y * self.ppu - (self.height/2))
+        self.f_r = (self.position.x * self.ppu + (self.width/2), self.position.y * self.ppu + (self.height/2))
+        self.b_l = (self.position.x * self.ppu - (self.width/2), self.position.y * self.ppu - (self.height/2))
+        self.b_r = (self.position.x * self.ppu - (self.width/2), self.position.y * self.ppu + (self.height/2))
         
 
 
@@ -104,10 +106,10 @@ class Car:
         self.ray_l.step(car_raycast_startpoint=self.position * self.ppu, car_angle=self.angle, walls=walls)
         self.ray_r.step(car_raycast_startpoint=self.position * self.ppu, car_angle=self.angle, walls=walls)
 
-        self.f_l = (self.position.x * self.ppu + (128/2), self.position.y * self.ppu - (64/2))
-        self.f_r = (self.position.x * self.ppu + (128/2), self.position.y * self.ppu + (64/2))
-        self.b_l = (self.position.x * self.ppu - (128/2), self.position.y * self.ppu - (64/2))
-        self.b_r = (self.position.x * self.ppu - (128/2), self.position.y * self.ppu + (64/2))
+        self.f_l = (self.position.x * self.ppu + (self.width/2), self.position.y * self.ppu - (self.height/2))
+        self.f_r = (self.position.x * self.ppu + (self.width/2), self.position.y * self.ppu + (self.height/2))
+        self.b_l = (self.position.x * self.ppu - (self.width/2), self.position.y * self.ppu - (self.height/2))
+        self.b_r = (self.position.x * self.ppu - (self.width/2), self.position.y * self.ppu + (self.height/2))
     
         self.f_l = rotate_point(self.position * self.ppu, self.f_l, radians(-self.angle))
         self.f_r = rotate_point(self.position * self.ppu, self.f_r, radians(-self.angle))

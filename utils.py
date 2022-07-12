@@ -29,12 +29,11 @@ def generate_border_walls(screen_dims):
 
     return walls
 
-def generate_track_walls(screen_dims):
+def generate_track_walls():
     walls = []
     
-    walls.append(Wall((0, 0), (screen_dims[0], 0)))
-    walls.append(Wall((0, 0), (0, screen_dims[1])))
-    walls.append(Wall((screen_dims[0], 0), (screen_dims[0], screen_dims[1])))
-    walls.append(Wall((0, screen_dims[1]), (screen_dims[0], screen_dims[1])))
+    # walls.append(Wall(start_pos=(80, 48), end_pos=(700, 48)))
+    # walls.append(Wall(start_pos=(700, 200), end_pos=(700, 500)))
+
     
     return walls

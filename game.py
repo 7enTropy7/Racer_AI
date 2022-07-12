@@ -1,7 +1,7 @@
 import os
 import pygame
 from car import Car
-from utils import generate_border_walls
+from utils import generate_border_walls, generate_track_walls
 
 class Game:
     def __init__(self):
@@ -16,10 +16,11 @@ class Game:
         self.exit = False
 
     def run(self):
-        ppu = 32
-        car = Car(5, 15, ppu=ppu)
+        ppu = 8
+        car = Car(x=10, y=10, ppu=ppu)
         walls = []
         walls.extend(generate_border_walls(self.screen_dims))
+        walls.extend(generate_track_walls())
 
         while not self.exit:
             dt = self.clock.get_time() / 1000
