@@ -1,6 +1,7 @@
 from wall import Wall
 import random
 import math
+import pickle as pkl
 
 def rotate_point(origin, point, angle):
     ox, oy = origin
@@ -18,22 +19,21 @@ def generate_border_walls(screen_dims):
     walls.append(Wall((screen_dims[0], 0), (screen_dims[0], screen_dims[1])))
     walls.append(Wall((0, screen_dims[1]), (screen_dims[0], screen_dims[1])))
     
-    for i in range(3):
-        start_x = random.randint(0, screen_dims[0])
-        start_y = random.randint(0, screen_dims[1])
-        end_x = random.randint(0, screen_dims[0])
-        end_y = random.randint(0, screen_dims[1])
-        walls.append(Wall((start_x, start_y), (end_x, end_y)))
+    # for i in range(3):
+    #     start_x = random.randint(0, screen_dims[0])
+    #     start_y = random.randint(0, screen_dims[1])
+    #     end_x = random.randint(0, screen_dims[0])
+    #     end_y = random.randint(0, screen_dims[1])
+    #     walls.append(Wall((start_x, start_y), (end_x, end_y)))
 
     # walls.append(Wall((700, 200), (700, 500)))
 
     return walls
 
-def generate_track_walls():
-    walls = []
-    
-    # walls.append(Wall(start_pos=(80, 48), end_pos=(700, 48)))
-    # walls.append(Wall(start_pos=(700, 200), end_pos=(700, 500)))
-
-    
+def generate_track_walls(file_name):
+    walls = pkl.load(open(file_name, 'rb'))
     return walls
+
+def generate_track_checkpoints(file_name):
+    checkpoints = pkl.load(open(file_name, 'rb'))
+    return checkpoints

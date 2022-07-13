@@ -21,6 +21,7 @@ class Car:
         self.acceleration = 0.0
         self.steering = 0.0
         self.ppu = ppu
+        self.reward = 0
 
         current_dir = os.path.dirname(os.path.abspath(__file__))
         image_path = os.path.join(current_dir, "assets/car.png")
@@ -151,6 +152,16 @@ class Car:
             return False  # intersection is out of bound
         else:
             return True
+
+    def checkpoint_collision(self, checkpoint):
+        front_collision = self.check_collision(checkpoint, self.f_l, self.f_r) #front
+        back_collision = self.check_collision(checkpoint, self.b_l, self.b_r) #back
+        left_collision = self.check_collision(checkpoint, self.f_l, self.b_l) #left
+        right_collision = self.check_collision(checkpoint, self.f_r, self.b_r) #right
+
+        if(front_collision or back_collision or left_collision or right_collision):
+            return True
+        return False
 
 
     def state(self):
