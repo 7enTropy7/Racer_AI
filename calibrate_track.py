@@ -6,7 +6,7 @@ screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()
 done = False
 points = []
-walls = None
+walls = []
 counter = 0
 while not done:
     for event in pygame.event.get():
@@ -24,16 +24,15 @@ while not done:
 
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                deleted_point = points.pop()
-                print('Deleted: ', deleted_point)
-                if len(walls) > 0:
-                    for wall in walls:
-                        if deleted_point in wall:
-                            walls.remove(wall)
-            if event.key == pygame.K_s:
-                print('Saving...')
-                walls = [[points[i],points[i+1]] for i in range(len(points)-1)]
-                print(walls)
+                if len(points) > 0:
+                    deleted_point = points.pop()
+                    print('Deleted: ', deleted_point)
+                    if len(walls) > 0:
+                        for wall in walls:
+                            if deleted_point in wall:
+                                walls.remove(wall)
+
+        walls = [[points[i],points[i+1]] for i in range(len(points)-1)]
 
 
     click = pygame.mouse.get_pressed()
