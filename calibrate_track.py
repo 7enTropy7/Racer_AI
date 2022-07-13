@@ -4,6 +4,7 @@ from wall import Wall
 from checkpoint import Checkpoint
 import sys
 import pickle as pkl
+import os
 
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
@@ -13,6 +14,11 @@ points = []
 walls = []
 checkpoint_points = []
 checkpoints = []
+
+if os.path.exists("walls.pkl"):
+    os.remove("walls.pkl")
+if os.path.exists("checkpoints.pkl"):
+    os.remove("checkpoints.pkl")
 
 while not done:
     for event in pygame.event.get():
@@ -46,17 +52,23 @@ while not done:
 
             elif event.key == pygame.K_s:
                 print('Saving...')
-                wall_obj_array = []
-                for wall in walls:
-                    wall_obj_array.append(Wall(wall[0], wall[1]))
-                pkl.dump(wall_obj_array, open('walls.pkl', 'wb'))
+                if len(walls) > 0 and len(checkpoints) > 0:
+                    wall_obj_array = []
+                    for wall in walls:
+                        wall_obj_array.append(Wall(wall[0], wall[1]))
+                    pkl.dump(wall_obj_array, open('walls.pkl', 'wb'))
+                    print('Walls Saved Successfully.')
 
-                checkpoint_obj_array = []
-                for checkpoint in checkpoints:
-                    checkpoint_obj_array.append(Checkpoint(checkpoint[0], checkpoint[1]))
-                pkl.dump(checkpoint_obj_array, open('checkpoints.pkl', 'wb'))
+                    checkpoint_obj_array = []
+                    for checkpoint in checkpoints:
+                        checkpoint_obj_array.append(Checkpoint(checkpoint[0], checkpoint[1]))
+                    pkl.dump(checkpoint_obj_array, open('checkpoints.pkl', 'wb'))
+                    print('Checkpoints Saved Successfully.')
+                    sys.exit(1)
+                else:
+                    print('Track Walls or Checkpoints missing. \nQuitting...')
+                    sys.exit(1)
 
-                sys.exit(1)
 
         walls = [[points[i],points[i+1]] for i in range(len(points)-1)]
         checkpoints = [[checkpoint_points[i],checkpoint_points[i+1]] for i in range(0, len(checkpoint_points)-1, 2)]
@@ -69,7 +81,7 @@ while not done:
 
     screen.fill('gray12')
     
-    pygame.draw.rect(screen, (255,0,0), (80,80,64,32), 3)
+    pygame.draw.rect(screen, (255,0,0), (80,80,64,32), 1)
 
     for point in points:
         pygame.draw.circle(screen, (255,255,0), center=point, radius=5, width=5)
