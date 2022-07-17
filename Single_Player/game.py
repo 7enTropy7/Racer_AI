@@ -26,7 +26,7 @@ class Game:
         checkpoints.extend(generate_track_checkpoints('checkpoints.pkl'))
 
         while not self.exit:
-            dt = self.clock.get_time() / 1000
+            dt = self.clock.get_time() / 300
 
             # Event queue
             for event in pygame.event.get():
@@ -60,7 +60,7 @@ class Game:
 
             car.draw(self.screen)
 
-            pygame.display.flip()
+            pygame.display.update()
 
 
             self.clock.tick(self.ticks)
