@@ -37,16 +37,16 @@ class RacerEnvironment(Env):
 
         self.walls = []
         self.walls.extend(generate_border_walls(self.screen_dims))
-        self.walls.extend(generate_track_walls('walls.pkl'))
+        self.walls.extend(generate_track_walls('metadata/walls.pkl'))
 
         self.checkpoints = []
-        self.checkpoints.extend(generate_track_checkpoints('checkpoints.pkl'))
+        self.checkpoints.extend(generate_track_checkpoints('metadata/checkpoints.pkl'))
 
         self.car = Car(x=10, y=10, ppu=self.ppu)
 
     def reset(self):
         self.checkpoints = []
-        self.checkpoints.extend(generate_track_checkpoints('checkpoints.pkl'))
+        self.checkpoints.extend(generate_track_checkpoints('metadata/checkpoints.pkl'))
         self.reward = 0
         self.car = Car(x=10, y=10, ppu=self.ppu)
         state = []

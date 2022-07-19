@@ -14,10 +14,10 @@ walls = []
 checkpoint_points = []
 checkpoints = []
 
-if os.path.exists("walls.pkl"):
-    os.remove("walls.pkl")
-if os.path.exists("checkpoints.pkl"):
-    os.remove("checkpoints.pkl")
+if os.path.exists("metadata/walls.pkl"):
+    os.remove("metadata/walls.pkl")
+if os.path.exists("metadata/checkpoints.pkl"):
+    os.remove("metadata/checkpoints.pkl")
 
 while not done:
     for event in pygame.event.get():
@@ -55,13 +55,13 @@ while not done:
                     wall_obj_array = []
                     for wall in walls:
                         wall_obj_array.append(Wall(wall[0], wall[1]))
-                    pkl.dump(wall_obj_array, open('walls.pkl', 'wb'))
+                    pkl.dump(wall_obj_array, open('metadata/walls.pkl', 'wb'))
                     print('Walls Saved Successfully.')
 
                     checkpoint_obj_array = []
                     for checkpoint in checkpoints:
                         checkpoint_obj_array.append(Checkpoint(checkpoint[0], checkpoint[1]))
-                    pkl.dump(checkpoint_obj_array, open('checkpoints.pkl', 'wb'))
+                    pkl.dump(checkpoint_obj_array, open('metadata/checkpoints.pkl', 'wb'))
                     print('Checkpoints Saved Successfully.')
                     sys.exit(1)
                 else:
