@@ -1,4 +1,3 @@
-from selectors import EVENT_WRITE
 import pygame
 from wall import Wall
 from checkpoint import Checkpoint
@@ -92,11 +91,11 @@ while not done:
 
     if walls is not None:
         for wall in walls:
-            pygame.draw.line(screen, (255,255,255), start_pos=wall[0], end_pos=wall[1], width=3)
+            pygame.draw.line(screen, pygame.Color('aquamarine4'), start_pos=wall[0], end_pos=wall[1], width=3)
 
     if checkpoints is not None:
         for checkpoint in checkpoints:
-            pygame.draw.line(screen, (0,255,0), start_pos=checkpoint[0], end_pos=checkpoint[1], width=3)
+            pygame.draw.line(screen, pygame.Color('green'), start_pos=checkpoint[0], end_pos=checkpoint[1], width=2)
 
     pygame.display.flip()
     clock.tick(60)

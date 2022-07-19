@@ -39,7 +39,7 @@ class Raycast:
 
 
     def draw(self, screen):
-        pygame.draw.line(screen, (0,125,255), self.startpoint, self.endpoint, 2)
+        pygame.draw.line(screen, (0,125,255), self.startpoint, self.endpoint, 1)
 
     def check_collision(self, wall):
         x1 = wall.start_pos[0]

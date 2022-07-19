@@ -2,7 +2,7 @@ import pygame
 import math
 
 class Checkpoint:
-    def __init__(self, start_pos, end_pos, color = 'green'):
+    def __init__(self, start_pos, end_pos, color = pygame.Color('green')):
         self.start_pos = start_pos
         self.end_pos = end_pos
         self.color = color
@@ -18,4 +18,4 @@ class Checkpoint:
         return (self.start_pos[0] + self.end_pos[0]) / 2, (self.start_pos[1] + self.end_pos[1]) / 2
 
     def draw(self, screen):
-        pygame.draw.line(screen, self.color, self.start_pos, self.end_pos, 3)
+        pygame.draw.line(screen, self.color, self.start_pos, self.end_pos, 2)

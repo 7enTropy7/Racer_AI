@@ -176,16 +176,17 @@ class Car:
     def state(self):
         return [self.ray_l.ray_length, self.ray_c.ray_length, self.ray_r.ray_length]
     
-    def draw(self, screen):
-        self.ray_c.draw(screen)
-        self.ray_l.draw(screen)
-        self.ray_r.draw(screen)
+    def draw(self, screen, evaluate):
+        if not evaluate:
+            self.ray_c.draw(screen)
+            self.ray_l.draw(screen)
+            self.ray_r.draw(screen)
 
         rotated_car = pygame.transform.rotate(self.car_image, self.angle)
         rect = rotated_car.get_rect()
         screen.blit(rotated_car, self.position * self.ppu - (rect.width / 2, rect.height / 2))
 
-        pygame.draw.circle(screen, (0,255,0), center=self.f_l, radius=5, width=2)
-        pygame.draw.circle(screen, (0,255,0), center=self.f_r, radius=5, width=2)
-        pygame.draw.circle(screen, (0,255,0), center=self.b_l, radius=5, width=2)
-        pygame.draw.circle(screen, (0,255,0), center=self.b_r, radius=5, width=2)
+        # pygame.draw.circle(screen, (0,255,0), center=self.f_l, radius=5, width=2)
+        # pygame.draw.circle(screen, (0,255,0), center=self.f_r, radius=5, width=2)
+        # pygame.draw.circle(screen, (0,255,0), center=self.b_l, radius=5, width=2)
+        # pygame.draw.circle(screen, (0,255,0), center=self.b_r, radius=5, width=2)

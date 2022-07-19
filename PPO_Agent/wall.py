@@ -2,7 +2,7 @@ import pygame
 import math
 
 class Wall:
-    def __init__(self, start_pos, end_pos, color = 'white'):
+    def __init__(self, start_pos, end_pos, color=pygame.Color('aquamarine4')):
         self.start_pos = start_pos
         self.end_pos = end_pos
         self.color = color

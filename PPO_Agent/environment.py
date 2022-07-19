@@ -8,19 +8,19 @@ from gym import Env
 from gym.spaces import Box, Discrete
 
 class RacerEnvironment(Env):
-    def __init__(self, render=False):
+    def __init__(self, render=False, evaluate=False):
         super(RacerEnvironment, self).__init__()
 
         self.action_space = Discrete(5)
         self.observation_space = Box(low=0, high=1000, shape=(7,), dtype=np.float32)
         self.reward = 0
         self.render_flag = render
+        self.evaluate_flag = evaluate
         
         self.ppu = 8
 
         self.timesteps = 0
 
-        # Pygame stuff
         pygame.init()
 
         width = 1280
@@ -45,10 +45,6 @@ class RacerEnvironment(Env):
         self.car = Car(x=10, y=10, ppu=self.ppu)
 
     def reset(self):
-        # print('\nReset!\n')
-        # self.clock = pygame.time.Clock()
-        # self.dt = self.clock.get_time() / 100
-
         self.checkpoints = []
         self.checkpoints.extend(generate_track_checkpoints('checkpoints.pkl'))
         self.reward = 0
@@ -78,7 +74,6 @@ class RacerEnvironment(Env):
         # print(self.car.position.x * self.ppu, self.car.position.y * self.ppu)
         
         if self.timesteps % 1024 == 0:
-            # print('Timesteps: ', self.timesteps)
             self.done = True
 
         if self.done:
@@ -118,9 +113,10 @@ class RacerEnvironment(Env):
             for wall in self.walls:
                 wall.draw(self.screen)
 
-            for checkpoint in self.checkpoints:
-                checkpoint.draw(self.screen)
+            if not self.evaluate_flag:
+                for checkpoint in self.checkpoints:
+                    checkpoint.draw(self.screen)
 
-            self.car.draw(self.screen)
+            self.car.draw(self.screen, self.evaluate_flag)
 
             pygame.display.flip()
