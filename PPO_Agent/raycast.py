@@ -5,12 +5,22 @@ import math
 class Raycast:
     def __init__(self, startpoint, direction):
         self.startpoint = startpoint
-        if direction == 'c':
+        if direction == 'fc':
             self.initial_endpoint = self.startpoint + Vector2(3000, 0)
-        if direction == 'l':
+        if direction == 'fl':
             self.initial_endpoint = self.startpoint + Vector2(3000, -1800)
-        if direction == 'r':
+        if direction == 'fr':
             self.initial_endpoint = self.startpoint + Vector2(3000, 1800)
+        if direction == 'bc':
+            self.initial_endpoint = self.startpoint + Vector2(-3000, 0)
+        if direction == 'bl':
+            self.initial_endpoint = self.startpoint + Vector2(-3000, -1800)
+        if direction == 'br':
+            self.initial_endpoint = self.startpoint + Vector2(-3000, 1800)
+        if direction == 'l':
+            self.initial_endpoint = self.startpoint + Vector2(0, -3000)
+        if direction == 'r':
+            self.initial_endpoint = self.startpoint + Vector2(0, 3000)
         self.endpoint = None
         self.ray_length = 1000
         

@@ -29,7 +29,13 @@ class Car:
         self.width = self.car_image.get_width()
         self.height = self.car_image.get_height()
 
-        self.ray_c = Raycast(startpoint=Vector2(0,0), direction='c')
+        self.ray_fc = Raycast(startpoint=Vector2(0,0), direction='fc')
+        self.ray_fl = Raycast(startpoint=Vector2(0,0), direction='fl')
+        self.ray_fr = Raycast(startpoint=Vector2(0,0), direction='fr')
+        self.ray_bc = Raycast(startpoint=Vector2(0,0), direction='bc')
+        self.ray_bl = Raycast(startpoint=Vector2(0,0), direction='bl')
+        self.ray_br = Raycast(startpoint=Vector2(0,0), direction='br')
+
         self.ray_l = Raycast(startpoint=Vector2(0,0), direction='l')
         self.ray_r = Raycast(startpoint=Vector2(0,0), direction='r')
 
@@ -112,7 +118,12 @@ class Car:
 
         self.angle += degrees(angular_velocity) * dt
 
-        self.ray_c.step(car_raycast_startpoint=self.position * self.ppu, car_angle=self.angle, walls=walls)
+        self.ray_fc.step(car_raycast_startpoint=self.position * self.ppu, car_angle=self.angle, walls=walls)
+        self.ray_fl.step(car_raycast_startpoint=self.position * self.ppu, car_angle=self.angle, walls=walls)
+        self.ray_fr.step(car_raycast_startpoint=self.position * self.ppu, car_angle=self.angle, walls=walls)
+        self.ray_bc.step(car_raycast_startpoint=self.position * self.ppu, car_angle=self.angle, walls=walls)
+        self.ray_bl.step(car_raycast_startpoint=self.position * self.ppu, car_angle=self.angle, walls=walls)
+        self.ray_br.step(car_raycast_startpoint=self.position * self.ppu, car_angle=self.angle, walls=walls)
         self.ray_l.step(car_raycast_startpoint=self.position * self.ppu, car_angle=self.angle, walls=walls)
         self.ray_r.step(car_raycast_startpoint=self.position * self.ppu, car_angle=self.angle, walls=walls)
 
@@ -174,11 +185,16 @@ class Car:
 
 
     def state(self):
-        return [self.ray_l.ray_length, self.ray_c.ray_length, self.ray_r.ray_length]
+        return [self.ray_fl.ray_length, self.ray_fc.ray_length, self.ray_fr.ray_length, self.ray_bc.ray_length, self.ray_bl.ray_length, self.ray_br.ray_length, self.ray_l.ray_length, self.ray_r.ray_length]
     
     def draw(self, screen, evaluate):
         if not evaluate:
-            self.ray_c.draw(screen)
+            self.ray_fc.draw(screen)
+            self.ray_fl.draw(screen)
+            self.ray_fr.draw(screen)
+            self.ray_bc.draw(screen)
+            self.ray_bl.draw(screen)
+            self.ray_br.draw(screen)
             self.ray_l.draw(screen)
             self.ray_r.draw(screen)
 

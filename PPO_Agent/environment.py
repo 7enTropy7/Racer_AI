@@ -12,7 +12,7 @@ class RacerEnvironment(Env):
         super(RacerEnvironment, self).__init__()
 
         self.action_space = Discrete(5)
-        self.observation_space = Box(low=0, high=1000, shape=(7,), dtype=np.float32)
+        self.observation_space = Box(low=0, high=1000, shape=(12,), dtype=np.float32)
         self.reward = 0
         self.render_flag = render
         self.evaluate_flag = evaluate
