@@ -11,7 +11,7 @@ class RacerEnvironment(Env):
     def __init__(self, render=False, evaluate=False):
         super(RacerEnvironment, self).__init__()
 
-        self.action_space = Discrete(5)
+        self.action_space = Discrete(4)
         self.observation_space = Box(low=0, high=1000, shape=(12,), dtype=np.float32)
         self.reward = 0
         self.render_flag = render
@@ -75,6 +75,7 @@ class RacerEnvironment(Env):
         
         if self.timesteps % 1024 == 0:
             self.done = True
+            reward -= 5
 
         if self.done:
             self.reward = reward
@@ -89,7 +90,7 @@ class RacerEnvironment(Env):
         if checkpoint_collision_flag:
             # print("Checkpoint!")
             self.checkpoints.pop(0)
-            reward = 2
+            reward = 5
             self.timesteps = 1
             if len(self.checkpoints) == 0:
                 print("You win!")

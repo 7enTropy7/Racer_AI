@@ -58,11 +58,11 @@ class Car:
                 self.acceleration = -self.brake_deceleration
             else:
                 self.acceleration -= 1 * dt
-        elif action==2: #brake
-            if abs(self.velocity.x) > dt * self.brake_deceleration:
-                self.acceleration = -copysign(self.brake_deceleration, self.velocity.x)
-            else:
-                self.acceleration = -self.velocity.x / dt
+        # elif action==2: #brake
+        #     if abs(self.velocity.x) > dt * self.brake_deceleration:
+        #         self.acceleration = -copysign(self.brake_deceleration, self.velocity.x)
+        #     else:
+        #         self.acceleration = -self.velocity.x / dt
         # else:
         #     if abs(self.velocity.x) > dt * self.free_deceleration:
         #         self.acceleration = -copysign(self.free_deceleration, self.velocity.x)
@@ -71,9 +71,9 @@ class Car:
         #             self.acceleration = -self.velocity.x / dt
         self.acceleration = max(-self.max_acceleration, min(self.acceleration, self.max_acceleration))
 
-        if action==3: #right
+        if action==2: #right
             self.steering -= 30 * dt
-        elif action==4: #left
+        elif action==3: #left
             self.steering += 30 * dt
         else:
             self.steering = 0
@@ -94,10 +94,10 @@ class Car:
         
         if collision_flag:
             # print('Wall Collision!')
-            reward  = -1
+            reward  = -10
             return True, reward
         
-        reward = -0.01
+        reward = -0.1
         return False, reward
 
     def update(self, walls, dt):
