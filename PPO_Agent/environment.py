@@ -1,5 +1,6 @@
 import os
 import pickle as pkl
+import random
 import pygame
 from car import Car
 from utils import generate_border_walls, generate_track_checkpoints, generate_track_walls
@@ -18,7 +19,8 @@ class RacerEnvironment(Env):
         self.render_flag = render
         self.evaluate_flag = evaluate
         
-        self.metadata =  pkl.load(open('metadata/metadata.pkl', 'rb'))
+        self.tracks = os.listdir('tracks')
+        self.metadata = pkl.load(open('tracks/'+random.choice(self.tracks),'rb'))
 
         self.ppu = self.metadata['ppu']
 
@@ -48,6 +50,10 @@ class RacerEnvironment(Env):
         self.car = Car(x=self.metadata['car_x']/self.metadata['ppu'], y=self.metadata['car_y']/self.metadata['ppu'], ppu=self.ppu, angle=self.metadata['car_angle'])
 
     def reset(self):
+        self.metadata = pkl.load(open('tracks/'+random.choice(self.tracks),'rb'))
+        self.walls = []
+        self.walls.extend(generate_border_walls(self.screen_dims))
+        self.walls.extend(self.metadata['walls'])
         self.checkpoints = []
         self.checkpoints.extend(self.metadata['checkpoints'])
         self.reward = 0

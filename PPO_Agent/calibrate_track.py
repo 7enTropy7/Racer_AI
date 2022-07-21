@@ -82,8 +82,9 @@ while not done:
 
                     # metadata['car'] = Car(x=car_x/ppu, y=car_y/ppu, ppu=ppu, angle=car_angle)
 
-                    pkl.dump(metadata, open('metadata/metadata.pkl', 'wb'))
-                    print('Metadata Saved Successfully.')
+                    track_id = len(os.listdir('tracks')) + 1
+                    pkl.dump(metadata, open('tracks/metadata_{}.pkl'.format(track_id), 'wb'))
+                    print('Track: {} Saved Successfully.'.format(track_id))
 
                     sys.exit(1)
                 else:
