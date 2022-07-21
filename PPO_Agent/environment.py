@@ -1,4 +1,5 @@
 import os
+import pickle as pkl
 import pygame
 from car import Car
 from utils import generate_border_walls, generate_track_checkpoints, generate_track_walls
@@ -17,7 +18,9 @@ class RacerEnvironment(Env):
         self.render_flag = render
         self.evaluate_flag = evaluate
         
-        self.ppu = 8
+        self.metadata =  pkl.load(open('metadata/metadata.pkl', 'rb'))
+
+        self.ppu = self.metadata['ppu']
 
         self.timesteps = 0
 
@@ -37,18 +40,18 @@ class RacerEnvironment(Env):
 
         self.walls = []
         self.walls.extend(generate_border_walls(self.screen_dims))
-        self.walls.extend(generate_track_walls('metadata/walls.pkl'))
+        self.walls.extend(self.metadata['walls'])
 
         self.checkpoints = []
-        self.checkpoints.extend(generate_track_checkpoints('metadata/checkpoints.pkl'))
+        self.checkpoints.extend(self.metadata['checkpoints'])
 
-        self.car = Car(x=10, y=10, ppu=self.ppu)
+        self.car = Car(x=self.metadata['car_x']/self.metadata['ppu'], y=self.metadata['car_y']/self.metadata['ppu'], ppu=self.ppu, angle=self.metadata['car_angle'])
 
     def reset(self):
         self.checkpoints = []
-        self.checkpoints.extend(generate_track_checkpoints('metadata/checkpoints.pkl'))
+        self.checkpoints.extend(self.metadata['checkpoints'])
         self.reward = 0
-        self.car = Car(x=10, y=10, ppu=self.ppu)
+        self.car = Car(x=self.metadata['car_x']/self.metadata['ppu'], y=self.metadata['car_y']/self.metadata['ppu'], ppu=self.ppu, angle=self.metadata['car_angle'])
         state = []
         state.extend(self.car.state())
         state.extend([self.checkpoints[0].state()[0], self.checkpoints[0].state()[1]])
