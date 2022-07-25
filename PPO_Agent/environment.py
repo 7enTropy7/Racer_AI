@@ -52,8 +52,6 @@ class RacerEnvironment(Env):
         self.track_counter = 1
 
     def reset(self):
-        self.track_counter = self.track_counter % len(self.tracks)
-
         self.metadata = pkl.load(open('tracks/'+'metadata_{}.pkl'.format(self.track_counter),'rb'))
         self.walls = []
         self.walls.extend(generate_border_walls(self.screen_dims))
@@ -70,6 +68,8 @@ class RacerEnvironment(Env):
         self.done = False
 
         self.track_counter += 1
+        if self.track_counter > len(self.tracks):
+            self.track_counter = 1
         return state
 
     def get_state(self):
