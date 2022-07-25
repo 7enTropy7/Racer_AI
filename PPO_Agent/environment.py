@@ -49,8 +49,12 @@ class RacerEnvironment(Env):
 
         self.car = Car(x=self.metadata['car_x']/self.metadata['ppu'], y=self.metadata['car_y']/self.metadata['ppu'], ppu=self.ppu, angle=self.metadata['car_angle'])
 
+        self.track_counter = 1
+
     def reset(self):
-        self.metadata = pkl.load(open('tracks/'+random.choice(self.tracks),'rb'))
+        self.track_counter = self.track_counter % len(self.tracks)
+
+        self.metadata = pkl.load(open('tracks/'+'metadata_{}.pkl'.format(self.track_counter),'rb'))
         self.walls = []
         self.walls.extend(generate_border_walls(self.screen_dims))
         self.walls.extend(self.metadata['walls'])
@@ -64,6 +68,8 @@ class RacerEnvironment(Env):
         state.extend([self.car.position.x * self.ppu, self.car.position.y * self.ppu])
         state = np.array(state).astype(np.float32)
         self.done = False
+
+        self.track_counter += 1
         return state
 
     def get_state(self):

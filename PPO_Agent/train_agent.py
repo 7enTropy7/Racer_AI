@@ -12,8 +12,8 @@ env = RacerEnvironment(render=True)
 if os.path.exists('trained_agent/racer.zip'):
     model = PPO.load('trained_agent/racer.zip', env=env)
 else:
-    policy_kwargs = dict(net_arch=[dict(pi=[64, 32], vf=[64, 32])])
+    policy_kwargs = dict(net_arch=[dict(pi=[16, 16], vf=[16, 16])])
     model = PPO("MlpPolicy", env, verbose=1, policy_kwargs=policy_kwargs)
 
-model.learn(total_timesteps=100000)
+model.learn(total_timesteps=600000)
 model.save("trained_agent/racer")

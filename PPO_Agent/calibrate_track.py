@@ -59,6 +59,15 @@ while not done:
                             if deleted_point in wall:
                                 walls.remove(wall)
 
+            elif event.key == pygame.K_z:
+                if len(checkpoint_points) > 0:
+                    deleted_point = checkpoint_points.pop()
+                    print('Deleted: ', deleted_point)
+                    if len(checkpoints) > 0:
+                        for checkpoint in checkpoints:
+                            if deleted_point in checkpoint:
+                                checkpoints.remove(checkpoint)
+
             elif event.key == pygame.K_c:
                 car_attributes_flag = True
 
