@@ -124,6 +124,7 @@ class RacerEnvironment(Env):
     def render(self):
 
         if self.render_flag:
+            pygame.event.get()
             self.screen.fill((0, 0, 0))
 
             for wall in self.walls:
