@@ -7,6 +7,8 @@ import math
 from wall import Wall
 from checkpoint import Checkpoint
 
+os.makedirs('tracks', exist_ok=True)
+
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
 clock = pygame.time.Clock()

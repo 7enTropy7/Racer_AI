@@ -1,6 +1,7 @@
 import os
 import pickle as pkl
 import random
+import math
 import pygame
 from car import Car
 from utils import generate_border_walls, generate_track_checkpoints, generate_track_walls
@@ -14,7 +15,7 @@ class RacerEnvironment(Env):
         super(RacerEnvironment, self).__init__()
 
         self.action_space = Discrete(4)
-        self.observation_space = Box(low=0, high=1000, shape=(12,), dtype=np.float32)
+        self.observation_space = Box(low=0, high=1000, shape=(9,), dtype=np.float32)
         self.reward = 0
         self.render_flag = render
         self.evaluate_flag = evaluate
@@ -62,8 +63,10 @@ class RacerEnvironment(Env):
         self.car = Car(x=self.metadata['car_x']/self.metadata['ppu'], y=self.metadata['car_y']/self.metadata['ppu'], ppu=self.ppu, angle=self.metadata['car_angle'])
         state = []
         state.extend(self.car.state())
-        state.extend([self.checkpoints[0].state()[0], self.checkpoints[0].state()[1]])
-        state.extend([self.car.position.x * self.ppu, self.car.position.y * self.ppu])
+        # state.extend([self.checkpoints[0].state()[0], self.checkpoints[0].state()[1]])
+        # state.extend([self.car.position.x * self.ppu, self.car.position.y * self.ppu])
+        nearest_checkpoint_normalized_distance = math.sqrt(((self.car.position.x * self.ppu) - self.checkpoints[0].state()[0]) ** 2 + ((self.car.position.y * self.ppu) - self.checkpoints[0].state()[1]) ** 2) / math.sqrt(self.screen_dims[0]**2 + self.screen_dims[1]**2)
+        state.extend([nearest_checkpoint_normalized_distance])
         state = np.array(state).astype(np.float32)
         self.done = False
 
@@ -75,8 +78,10 @@ class RacerEnvironment(Env):
     def get_state(self):
         state = []
         state.extend(self.car.state())
-        state.extend([self.checkpoints[0].state()[0]/self.screen_dims[0], self.checkpoints[0].state()[1]/self.screen_dims[1]])
-        state.extend([(self.car.position.x * self.ppu)/self.screen_dims[0], (self.car.position.y * self.ppu)/self.screen_dims[1]])
+        # state.extend([self.checkpoints[0].state()[0]/self.screen_dims[0], self.checkpoints[0].state()[1]/self.screen_dims[1]])
+        # state.extend([(self.car.position.x * self.ppu)/self.screen_dims[0], (self.car.position.y * self.ppu)/self.screen_dims[1]])
+        nearest_checkpoint_normalized_distance = math.sqrt(((self.car.position.x * self.ppu) - self.checkpoints[0].state()[0]) ** 2 + ((self.car.position.y * self.ppu) - self.checkpoints[0].state()[1]) ** 2) / math.sqrt(self.screen_dims[0]**2 + self.screen_dims[1]**2)
+        state.extend([nearest_checkpoint_normalized_distance])
         state = np.array(state).astype(float)
         return state
 
@@ -90,6 +95,10 @@ class RacerEnvironment(Env):
         if self.timesteps % (1024) == 0:
             self.done = True
             reward -= 5
+
+        nearest_checkpoint_normalized_distance = math.sqrt(((self.car.position.x * self.ppu) - self.checkpoints[0].state()[0]) ** 2 + ((self.car.position.y * self.ppu) - self.checkpoints[0].state()[1]) ** 2) / math.sqrt(self.screen_dims[0]**2 + self.screen_dims[1]**2)
+        reward += (1-nearest_checkpoint_normalized_distance) * 0.1
+        # print('reward: {}'.format(reward))
 
         if self.done:
             self.reward = reward
