@@ -8,7 +8,7 @@ from raycast import Raycast
 from utils import rotate_point
 
 class Car:
-    def __init__(self, x, y, ppu=8, angle=0.0, length=4, max_steering=30, max_acceleration=5.0):
+    def __init__(self, x, y, ppu=8, angle=0.0, length=4, max_steering=30, max_acceleration=5.0, screen_width=1280, screen_height=720):
         self.position = Vector2(x, y)
         self.velocity = Vector2(0.0, 0.0)
         self.angle = angle
@@ -28,6 +28,8 @@ class Car:
         self.car_image = pygame.image.load(image_path)
         self.width = self.car_image.get_width()
         self.height = self.car_image.get_height()
+        self.screen_width = screen_width
+        self.screen_height = screen_height
 
         self.ray_fc = Raycast(startpoint=Vector2(0,0), direction='fc')
         self.ray_fl = Raycast(startpoint=Vector2(0,0), direction='fl')
@@ -94,7 +96,7 @@ class Car:
         
         if collision_flag:
             # print('Wall Collision!')
-            reward  = -10
+            reward  = -20
             return True, reward
         
         reward = -0.1
@@ -185,7 +187,8 @@ class Car:
 
 
     def state(self):
-        return [self.ray_fl.ray_length, self.ray_fc.ray_length, self.ray_fr.ray_length, self.ray_bc.ray_length, self.ray_bl.ray_length, self.ray_br.ray_length, self.ray_l.ray_length, self.ray_r.ray_length]
+        normalizer = math.sqrt(self.screen_width ** 2 + self.screen_height ** 2)
+        return [self.ray_fl.ray_length/normalizer, self.ray_fc.ray_length/normalizer, self.ray_fr.ray_length/normalizer, self.ray_bc.ray_length/normalizer, self.ray_bl.ray_length/normalizer, self.ray_br.ray_length/normalizer, self.ray_l.ray_length/normalizer, self.ray_r.ray_length/normalizer]
     
     def draw(self, screen, evaluate):
         if not evaluate:

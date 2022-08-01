@@ -47,7 +47,7 @@ class RacerEnvironment(Env):
         self.checkpoints = []
         self.checkpoints.extend(self.metadata['checkpoints'])
 
-        self.car = Car(x=self.metadata['car_x']/self.metadata['ppu'], y=self.metadata['car_y']/self.metadata['ppu'], ppu=self.ppu, angle=self.metadata['car_angle'])
+        self.car = Car(x=self.metadata['car_x']/self.metadata['ppu'], y=self.metadata['car_y']/self.metadata['ppu'], ppu=self.ppu, angle=self.metadata['car_angle'], screen_width=width, screen_height=height)
 
         self.track_counter = 1
 
@@ -75,8 +75,8 @@ class RacerEnvironment(Env):
     def get_state(self):
         state = []
         state.extend(self.car.state())
-        state.extend([self.checkpoints[0].state()[0], self.checkpoints[0].state()[1]])
-        state.extend([self.car.position.x * self.ppu, self.car.position.y * self.ppu])
+        state.extend([self.checkpoints[0].state()[0]/self.screen_dims[0], self.checkpoints[0].state()[1]/self.screen_dims[1]])
+        state.extend([(self.car.position.x * self.ppu)/self.screen_dims[0], (self.car.position.y * self.ppu)/self.screen_dims[1]])
         state = np.array(state).astype(float)
         return state
 
@@ -86,9 +86,8 @@ class RacerEnvironment(Env):
         self.dt = self.clock.get_time() / 100
 
         self.done, reward = self.car.step(action=action, walls=self.walls, dt=self.dt)
-        # print(self.car.position.x * self.ppu, self.car.position.y * self.ppu)
         
-        if self.timesteps % 1024 == 0:
+        if self.timesteps % (1024) == 0:
             self.done = True
             reward -= 5
 
@@ -105,11 +104,11 @@ class RacerEnvironment(Env):
         if checkpoint_collision_flag:
             # print("Checkpoint!")
             self.checkpoints.pop(0)
-            reward = 5
+            reward = 10
             self.timesteps = 1
             if len(self.checkpoints) == 0:
                 print("You win!")
-                reward = 10
+                reward = 20
                 self.done = True
 
         if not self.done:
