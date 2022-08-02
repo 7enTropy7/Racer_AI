@@ -25,4 +25,3 @@ else:
 callback = SaveOnBestTrainingRewardCallback(check_freq=2048, log_dir=log_dir)
 
 model.learn(total_timesteps=600000, callback=callback)
-# model.save("trained_agent/racer")
