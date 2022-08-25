@@ -14,7 +14,7 @@ class RacerEnvironment(Env):
     def __init__(self, render=False, evaluate=False):
         super(RacerEnvironment, self).__init__()
 
-        self.action_space = Discrete(4)
+        self.action_space = Discrete(3)
         self.observation_space = Box(low=0, high=1000, shape=(12,), dtype=np.float32)
         self.reward = 0
         self.render_flag = render

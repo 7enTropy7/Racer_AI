@@ -10,7 +10,7 @@ from utils import rotate_point
 class Car:
     def __init__(self, x, y, ppu=8, angle=0.0, length=4, max_steering=30, max_acceleration=5.0, screen_width=1280, screen_height=720):
         self.position = Vector2(x, y)
-        self.velocity = Vector2(0.0, 0.0)
+        self.velocity = Vector2(5.0, 0.0)
         self.angle = angle
         self.length = length
         self.max_acceleration = max_acceleration
@@ -50,34 +50,12 @@ class Car:
 
 
     def step(self, action, walls, dt):
-        if action==0: #forward
-            if self.velocity.x < 0:
-                self.acceleration = self.brake_deceleration
-            else:
-                self.acceleration += 1 * dt
-        elif action==1: #backward
-            if self.velocity.x > 0:
-                self.acceleration = -self.brake_deceleration
-            else:
-                self.acceleration -= 1 * dt
-        # elif action==2: #brake
-        #     if abs(self.velocity.x) > dt * self.brake_deceleration:
-        #         self.acceleration = -copysign(self.brake_deceleration, self.velocity.x)
-        #     else:
-        #         self.acceleration = -self.velocity.x / dt
-        # else:
-        #     if abs(self.velocity.x) > dt * self.free_deceleration:
-        #         self.acceleration = -copysign(self.free_deceleration, self.velocity.x)
-        #     else:
-        #         if dt != 0:
-        #             self.acceleration = -self.velocity.x / dt
-        self.acceleration = max(-self.max_acceleration, min(self.acceleration, self.max_acceleration))
-
-        if action==2: #right
+        self.acceleration = 0
+        if action==0: #right
             self.steering -= 30 * dt
-        elif action==3: #left
+        elif action==1: #left
             self.steering += 30 * dt
-        else:
+        elif action==2: #nothing
             self.steering = 0
         self.steering = max(-self.max_steering, min(self.steering, self.max_steering))
 
