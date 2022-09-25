@@ -1,20 +1,32 @@
+import pickle
 import numpy as np
-from keras.models import Sequential, load_model
-from keras.layers import Dense #, Dropout, Activation, Flatten, Reshape
+from tensorflow.keras.models import Sequential, load_model
+from tensorflow.keras.layers import Dense #, Dropout, Activation, Flatten, Reshape
 #from keras.utils import np_utils
+from environment import RacerEnvironment
+from stable_baselines3 import PPO
 
-num_rollouts = 20
+num_rollouts = 1
 expert_name = "Racer"
 data_file = "Racer_20_data"
 mean_rewards = []
 stds = []
 main_returns = []
 
-task_data = load_task_data("data/" + data_file + ".pkl")
-obs_data = np.array(task_data["observations"])
-act_data = np.array(task_data["actions"])
+# task_data = load_task_data("data/" + data_file + ".pkl")
+with open('trained_agent/env_obs_data.pkl', 'rb') as f:
+    obs_data = pickle.load(f)
 
-act_data = act_data.reshape(act_data.shape[0], act_data.shape[2])
+with open('trained_agent/env_act_data.pkl', 'rb') as f:
+    act_data = pickle.load(f)
+
+obs_data = np.array(obs_data) 
+act_data = np.array(act_data)
+
+# print(obs_data.shape)
+# print(act_data.shape)
+
+# act_data = act_data.reshape(act_data.shape[0], act_data.shape[2])
 
 
 for j in range(5): #Dagger main loop
@@ -27,15 +39,17 @@ for j in range(5): #Dagger main loop
     model.add(Dense(96, activation = "relu", input_shape = (obs_data.shape[1],)))
     model.add(Dense(96, activation = "relu"))
     model.add(Dense(96, activation = "relu"))
-    model.add(Dense(act_data.shape[1], activation = "linear"))
+    model.add(Dense(3, activation = "softmax"))
 
-    model.compile(loss = "mean_squared_error", optimizer = "adam", metrics=["accuracy"])
+    model.compile(loss = "sparse_categorical_crossentropy", optimizer = "adam", metrics=["accuracy"])
     model.fit(obs_data, act_data, batch_size = 64, epochs = 30, verbose = 0)
-    model.save('models/' + expert_name + '_dagger_model.h5')
+    model.save('dagger_models/' + expert_name + '_dagger_model.h5')
     
         
-    env = gym.make(expert_name)
-    max_steps = env.spec.timestep_limit
+    env = RacerEnvironment(render=True)
+    # max_steps = env.spec.timestep_limit
+    
+    expert_model = PPO.load("trained_agent/racer", env=env)
 
     returns = []
     new_observations = []
@@ -43,28 +57,21 @@ for j in range(5): #Dagger main loop
     for i in range(num_rollouts):
         print('iter', i)
         obs = env.reset()
-
-        #print("obs.shape:", obs)
         done = False
         totalr = 0.
         steps = 0
 
-        dagger_model = load_model('models/' + expert_name + '_dagger_model.h5')
+        dagger_model = load_model('dagger_models/' + expert_name + '_dagger_model.h5')
         while not done:
-            expert_action = policy_fn(obs[None,:])
-            predicted_action = dagger_model.predict(obs[None, :], batch_size = 64, verbose = 0)
-            
+            expert_action, _next_hidden_state = expert_model.predict(obs)#policy_fn(obs[None,:])
+            predicted_action = np.argmax(dagger_model.predict(obs[None, :], batch_size = 64, verbose = 0), axis=-1)[0]
+            print("Predicted action: ", predicted_action)
             new_observations.append(obs)
             new_actions.append(expert_action)
             
             obs, r, done, _ = env.step(predicted_action)
             totalr += r
             steps += 1
-            #if args.render:
-            #env.render()
-            if steps % 100 == 0: print("%i/%i"%(steps, max_steps))
-            if steps >= max_steps:
-                break
         returns.append(totalr)
 
     print('returns', returns)
@@ -79,5 +86,5 @@ for j in range(5): #Dagger main loop
     #data aggregation
     obs_data = np.concatenate((obs_data, np.array(new_observations)))
     new_actions = np.array(new_actions)
-    act_data = np.concatenate((act_data, np.array(new_actions.reshape(new_actions.shape[0], new_actions.shape[2]))))
+    act_data = np.concatenate((act_data, new_actions))#np.array(new_actions.reshape(new_actions.shape[0], new_actions.shape[2]))))
 

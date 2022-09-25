@@ -87,7 +87,7 @@ class RacerEnvironment(Env):
 
     def step(self, action):
         self.timesteps += 1
-
+        info = {}
         self.dt = self.clock.get_time() / 200
 
         self.done, reward = self.car.step(action=action, walls=self.walls, dt=self.dt)
@@ -96,9 +96,10 @@ class RacerEnvironment(Env):
             self.done = True
             reward -= 5
 
-        # nearest_checkpoint_normalized_distance = math.sqrt(((self.car.position.x * self.ppu) - self.checkpoints[0].state()[0]) ** 2 + ((self.car.position.y * self.ppu) - self.checkpoints[0].state()[1]) ** 2) / math.sqrt(self.screen_dims[0]**2 + self.screen_dims[1]**2)
-        # reward += (1-nearest_checkpoint_normalized_distance) * 0.1
-        # print('reward: {}'.format(reward))
+        nearest_checkpoint_normalized_distance = math.sqrt(((self.car.position.x * self.ppu) - self.checkpoints[0].state()[0]) ** 2 + ((self.car.position.y * self.ppu) - self.checkpoints[0].state()[1]) ** 2) / math.sqrt(self.screen_dims[0]**2 + self.screen_dims[1]**2)
+        checkpoint_distance_reward = (1-nearest_checkpoint_normalized_distance) * 0.5
+        # print('check point reward: {}'.format(checkpoint_distance_reward))
+        reward += checkpoint_distance_reward
 
         if self.done:
             self.reward = reward
@@ -119,15 +120,19 @@ class RacerEnvironment(Env):
                 print("You win!")
                 reward = 20
                 self.done = True
+                info['done'] = 'You win'
 
         if not self.done:
             self.render()        
             self.clock.tick(self.ticks)
-
+            next_state = self.get_state()
         else:
-            self.reset()
+            next_state = None
 
-        return self.get_state(), reward, self.done, {}
+        # else:
+        #     self.reset()
+
+        return next_state, reward, self.done, info#{}
 
     def render(self):
 
