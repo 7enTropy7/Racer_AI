@@ -19,8 +19,12 @@ class RacerEnvironment(Env):
         self.render_flag = render
         self.evaluate_flag = evaluate
         
-        self.tracks = os.listdir('tracks/training')
-        self.metadata = pkl.load(open('tracks/training/'+random.choice(self.tracks),'rb'))
+        if self.evaluate_flag:
+            self.tracks = os.listdir('tracks/testing')
+            self.metadata = pkl.load(open('tracks/testing/'+random.choice(self.tracks),'rb'))
+        else:
+            self.tracks = os.listdir('tracks/training')
+            self.metadata = pkl.load(open('tracks/training/'+random.choice(self.tracks),'rb'))
 
         self.ppu = self.metadata['ppu']
 
@@ -52,7 +56,10 @@ class RacerEnvironment(Env):
         self.track_counter = 1
 
     def reset(self):
-        self.metadata = pkl.load(open('tracks/training/'+'metadata_{}.pkl'.format(self.track_counter),'rb'))
+        if self.evaluate_flag:
+            self.metadata = pkl.load(open('tracks/testing/'+'metadata_{}.pkl'.format(self.track_counter),'rb'))
+        else:
+            self.metadata = pkl.load(open('tracks/training/'+'metadata_{}.pkl'.format(self.track_counter),'rb'))
         self.walls = []
         self.walls.extend(generate_border_walls(self.screen_dims))
         self.walls.extend(self.metadata['walls'])

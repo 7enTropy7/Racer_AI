@@ -36,7 +36,7 @@ for j in range(5): #Dagger main loop
     model.save('models/dagger_models/' + expert_name + '_dagger_model.h5')
     
         
-    env = RacerEnvironment(render=True)
+    env = RacerEnvironment(render=True, evaluate=True)
     
     expert_model = PPO.load("models/trained_ppo_agent/racer", env=env)
 
@@ -54,7 +54,6 @@ for j in range(5): #Dagger main loop
         while not done:
             expert_action, _next_hidden_state = expert_model.predict(obs)#policy_fn(obs[None,:])
             predicted_action = np.argmax(dagger_model.predict(obs[None, :], batch_size = 64, verbose = 0), axis=-1)[0]
-            print("Predicted action: ", predicted_action)
             new_observations.append(obs)
             new_actions.append(expert_action)
             
@@ -63,9 +62,9 @@ for j in range(5): #Dagger main loop
             steps += 1
         returns.append(totalr)
 
-    print('returns', returns)
-    print('mean return', np.mean(returns))
-    print('std of return', np.std(returns))
+    # print('returns', returns)
+    # print('mean return', np.mean(returns))
+    # print('std of return', np.std(returns))
     
     #record returns
     main_returns.append(returns)
