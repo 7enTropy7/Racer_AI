@@ -1,6 +1,10 @@
-# Racer_AI
+<div align="center">
+<h1> Racer_AI </h1>
+</div>
 
-A 2D OpenAI Gym style environment that allows you to create custom racing tracks with checkpoints, and train a car to navigate through them. This environment can be used as a benchmark for various reinforcement learning algorithms and is compatible with [Stable Baselines 3](https://github.com/DLR-RM/stable-baselines3).
+![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
+
+An OpenAI Gym style environment that allows you to create custom racing tracks with checkpoints, and train a car to navigate through them. This environment can be used as a benchmark for various reinforcement learning algorithms and is compatible with [Stable Baselines 3](https://github.com/DLR-RM/stable-baselines3).
 
 <div align="center">
 
@@ -29,22 +33,31 @@ python calibrate_track.py
 
 On running the above script, a pygame window will open up. Start off by defining where you want the car to spawn. This can be achieved by simply left-clicking on the desired location. Once the car is placed, it will point in the direction of the mouse cursor. The angular orientation can be finalized by pressing ```C``` on the keyboard.
 
+<div align="center">
+
 ![car](https://user-images.githubusercontent.com/36446402/193001124-2866bda4-4688-4468-8638-33222fb36643.gif)
 
+</div>
 
 ### Drawing the Track
 
 Next, we draw the borders of the race track. You can add marker points to the canvas using left-clicks. Walls will be formed between every consecutive set of marker points. The ```Space``` key can be used to undo the most recently added marker point.
 
+<div align="center">
+
 ![track_draw](https://user-images.githubusercontent.com/36446402/193001203-e96f68f9-cc4d-4e03-b7d6-b7520372518f.gif)
 
+</div>
 
 ### Adding Checkpoints
 
 Checkpoints are used by the agent to gain a sense of direction in which the track must be traversed. Checkpoints must be created across the track in the order that the car must pass through them. To add a checkpoint, simply right-click on 2 points across the width of the track. Note that the sequence of the checkpoints will be the order in which the car passes through them. Be kind to your agent and make sure that the checkpoints are placed in a way that the car can actually reach them. It is recommended to create a larger number of checkpoints across turning points in the track.
 
+<div align="center">
+
 ![checkpoint](https://user-images.githubusercontent.com/36446402/193001287-50996dd1-98f4-4b90-81d1-71ce7e3e3585.gif)
 
+</div>
 
 The ```Z``` key can be used to undo the most recently added checkpoint.
 
@@ -69,8 +82,11 @@ We have used the Proximal Policy Optimization (PPO) algorithm from <b>Stable Bas
 python train_ppo_agent.py
 ```
 
+<div align="center">
+
 ![train_ppo](https://user-images.githubusercontent.com/36446402/193001414-412087be-4e2d-4e0d-8bc1-a97b6d5728ce.gif)
 
+</div>
 
 ### Testing
 
@@ -78,8 +94,11 @@ python train_ppo_agent.py
 python evaluate_ppo_agent.py
 ```
 
+<div align="center">
+
 ![test_ppo](https://user-images.githubusercontent.com/36446402/193001470-5715eadb-6d1d-4699-9de0-5a25aa1233fd.gif)
 
+</div>
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
@@ -101,8 +120,11 @@ Now, we can train the novice agent using the DAgger algorithm on any custom trac
 python dagger.py
 ```
 
+<div align="center">
+
 ![dagger](https://user-images.githubusercontent.com/36446402/193001554-629475f6-eb28-4f28-9068-925c2e523f9e.gif)
 
+</div>
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
@@ -113,4 +135,4 @@ python dagger.py
 # License
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details
