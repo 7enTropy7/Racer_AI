@@ -1,5 +1,4 @@
-from wall import Wall
-import random
+from .wall import Wall
 import math
 import pickle as pkl
 

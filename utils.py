@@ -1,5 +1,5 @@
 from stable_baselines3.common.callbacks import BaseCallback
-from stable_baselines3.common.results_plotter import load_results, ts2xy, plot_results
+from stable_baselines3.common.results_plotter import load_results, ts2xy
 import os
 from wall import Wall
 import math

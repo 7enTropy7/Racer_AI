@@ -1,8 +1,7 @@
 import pickle
 import numpy as np
 from tensorflow.keras.models import Sequential, load_model
-from tensorflow.keras.layers import Dense #, Dropout, Activation, Flatten, Reshape
-#from keras.utils import np_utils
+from tensorflow.keras.layers import Dense
 from environment import RacerEnvironment
 from stable_baselines3 import PPO
 
@@ -13,27 +12,18 @@ mean_rewards = []
 stds = []
 main_returns = []
 
-# task_data = load_task_data("data/" + data_file + ".pkl")
-with open('trained_agent/env_obs_data.pkl', 'rb') as f:
+with open('models/trained_ppo_agent/env_obs_data.pkl', 'rb') as f:
     obs_data = pickle.load(f)
 
-with open('trained_agent/env_act_data.pkl', 'rb') as f:
+with open('models/trained_ppo_agent/env_act_data.pkl', 'rb') as f:
     act_data = pickle.load(f)
 
 obs_data = np.array(obs_data) 
 act_data = np.array(act_data)
 
-# print(obs_data.shape)
-# print(act_data.shape)
-
-# act_data = act_data.reshape(act_data.shape[0], act_data.shape[2])
-
-
 for j in range(5): #Dagger main loop
     print("Dagger Loop: ", j)
     print("obs_data.shape", obs_data.shape)
-    
-    #create a Feedforward network useing Keras
     
     model = Sequential()
     model.add(Dense(96, activation = "relu", input_shape = (obs_data.shape[1],)))
@@ -43,13 +33,12 @@ for j in range(5): #Dagger main loop
 
     model.compile(loss = "sparse_categorical_crossentropy", optimizer = "adam", metrics=["accuracy"])
     model.fit(obs_data, act_data, batch_size = 64, epochs = 30, verbose = 0)
-    model.save('dagger_models/' + expert_name + '_dagger_model.h5')
+    model.save('models/dagger_models/' + expert_name + '_dagger_model.h5')
     
         
     env = RacerEnvironment(render=True)
-    # max_steps = env.spec.timestep_limit
     
-    expert_model = PPO.load("trained_agent/racer", env=env)
+    expert_model = PPO.load("models/trained_ppo_agent/racer", env=env)
 
     returns = []
     new_observations = []
@@ -61,7 +50,7 @@ for j in range(5): #Dagger main loop
         totalr = 0.
         steps = 0
 
-        dagger_model = load_model('dagger_models/' + expert_name + '_dagger_model.h5')
+        dagger_model = load_model('models/dagger_models/' + expert_name + '_dagger_model.h5')
         while not done:
             expert_action, _next_hidden_state = expert_model.predict(obs)#policy_fn(obs[None,:])
             predicted_action = np.argmax(dagger_model.predict(obs[None, :], batch_size = 64, verbose = 0), axis=-1)[0]
@@ -86,5 +75,4 @@ for j in range(5): #Dagger main loop
     #data aggregation
     obs_data = np.concatenate((obs_data, np.array(new_observations)))
     new_actions = np.array(new_actions)
-    act_data = np.concatenate((act_data, new_actions))#np.array(new_actions.reshape(new_actions.shape[0], new_actions.shape[2]))))
-
+    act_data = np.concatenate((act_data, new_actions))

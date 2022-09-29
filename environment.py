@@ -4,8 +4,7 @@ import random
 import math
 import pygame
 from car import Car
-from utils import generate_border_walls, generate_track_checkpoints, generate_track_walls
-import gym
+from utils import generate_border_walls
 import numpy as np
 from gym import Env
 from gym.spaces import Box, Discrete
@@ -20,8 +19,8 @@ class RacerEnvironment(Env):
         self.render_flag = render
         self.evaluate_flag = evaluate
         
-        self.tracks = os.listdir('tracks')
-        self.metadata = pkl.load(open('tracks/'+random.choice(self.tracks),'rb'))
+        self.tracks = os.listdir('tracks/training')
+        self.metadata = pkl.load(open('tracks/training/'+random.choice(self.tracks),'rb'))
 
         self.ppu = self.metadata['ppu']
 
@@ -53,7 +52,7 @@ class RacerEnvironment(Env):
         self.track_counter = 1
 
     def reset(self):
-        self.metadata = pkl.load(open('tracks/'+'metadata_{}.pkl'.format(self.track_counter),'rb'))
+        self.metadata = pkl.load(open('tracks/training/'+'metadata_{}.pkl'.format(self.track_counter),'rb'))
         self.walls = []
         self.walls.extend(generate_border_walls(self.screen_dims))
         self.walls.extend(self.metadata['walls'])

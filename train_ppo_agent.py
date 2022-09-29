@@ -1,5 +1,4 @@
 import os
-from platform import architecture
 
 from environment import RacerEnvironment
 from utils import SaveOnBestTrainingRewardCallback
@@ -7,7 +6,7 @@ from stable_baselines3.common.monitor import Monitor
 from stable_baselines3 import PPO
 from stable_baselines3.common.env_checker import check_env
 
-log_dir = "trained_agent/"
+log_dir = "models/trained_ppo_agent/"
 os.makedirs(log_dir, exist_ok=True)
 
 env = RacerEnvironment(render=True)
@@ -15,9 +14,9 @@ env = Monitor(env, log_dir)
 
 # check_env(env, warn=True)
 
-if os.path.exists('trained_agent/racer.zip'):
+if os.path.exists('models/trained_ppo_agent/racer.zip'):
     print("Loading existing model")
-    model = PPO.load('trained_agent/racer.zip', env=env)
+    model = PPO.load('models/trained_ppo_agent/racer.zip', env=env)
 else:
     print("Training new model")
     model = PPO("MlpPolicy", env, verbose=1)

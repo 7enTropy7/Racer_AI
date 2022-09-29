@@ -7,7 +7,7 @@ import math
 from wall import Wall
 from checkpoint import Checkpoint
 
-os.makedirs('tracks', exist_ok=True)
+os.makedirs('tracks/training', exist_ok=True)
 
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
@@ -93,8 +93,8 @@ while not done:
 
                     # metadata['car'] = Car(x=car_x/ppu, y=car_y/ppu, ppu=ppu, angle=car_angle)
 
-                    track_id = len(os.listdir('tracks')) + 1
-                    pkl.dump(metadata, open('tracks/metadata_{}.pkl'.format(track_id), 'wb'))
+                    track_id = len(os.listdir('tracks/training')) + 1
+                    pkl.dump(metadata, open('tracks/training/metadata_{}.pkl'.format(track_id), 'wb'))
                     print('Track: {} Saved Successfully.'.format(track_id))
 
                     sys.exit(1)

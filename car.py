@@ -1,8 +1,6 @@
-import os
-import sys
 import pygame
 import math
-from math import sin, radians, degrees, copysign, cos
+from math import sin, radians, degrees
 from pygame.math import Vector2
 from raycast import Raycast
 from utils import rotate_point
@@ -23,8 +21,7 @@ class Car:
         self.ppu = ppu
         self.reward = 0
 
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        image_path = os.path.join(current_dir, "assets/car.png")
+        image_path = "assets/car.png"
         self.car_image = pygame.image.load(image_path)
         self.width = self.car_image.get_width()
         self.height = self.car_image.get_height()
