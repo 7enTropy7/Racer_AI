@@ -1,6 +1,6 @@
 # Racer_AI
 
-A 2D OpenAI Gym style environment that allows you to create custom racing tracks with checkpoints, and train a car to navigate through them. This environment can be used as a benchmark for various reinforcement learning algorithms and is compatible with Stable Baselines 3.
+A 2D OpenAI Gym style environment that allows you to create custom racing tracks with checkpoints, and train a car to navigate through them. This environment can be used as a benchmark for various reinforcement learning algorithms and is compatible with [Stable Baselines 3](https://github.com/DLR-RM/stable-baselines3).
 
 <div align="center">
 
@@ -13,7 +13,7 @@ A 2D OpenAI Gym style environment that allows you to create custom racing tracks
 
 </div>
 
-In this repo, we have trained a PPO agent using Stable Baselines 3 to navigate through various custom race tracks. We then utilized the trained expert agent to help a novice agent traverse a new track using imitation learning (the Dagger algorithm). 
+In this repo, we have trained a PPO agent using [Stable Baselines 3](https://github.com/DLR-RM/stable-baselines3) to navigate through various custom race tracks. We then utilized the trained expert agent to help a novice agent traverse a new track using Imitation Learning ([DAgger algorithm](https://www.ri.cmu.edu/pub_files/2011/4/Ross-AISTATS11-NoRegret.pdf)). 
 
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
