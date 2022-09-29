@@ -90,6 +90,9 @@ python train_ppo_agent.py
 
 ### Testing
 
+Trained PPO model is already included in this repo. To test the agent, run the following command:
+
+
 ```bash
 python evaluate_ppo_agent.py
 ```
@@ -129,8 +132,7 @@ python dagger.py
 ![-----------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/aqua.png)
 
 # Authors
-* [**Anirudh Rajiv Menon**](https://github.com/axe76)
-* [**Unnikrishnan Menon**](https://github.com/7enTropy7)
+Developed by [**Anirudh Rajiv Menon**](https://github.com/axe76) and [**Unnikrishnan Menon**](https://github.com/7enTropy7).
 
 # License
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
