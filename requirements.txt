@@ -2,5 +2,5 @@ gym==0.26.1
 numpy==1.22.2
 pygame==2.1.0
 stable_baselines3==1.6.0
-tensorflow==2.10.0
+tensorflow==2.11.1
 tensorflow_macos==2.8.0
